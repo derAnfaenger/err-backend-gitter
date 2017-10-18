@@ -5,6 +5,8 @@ from errbot.backends.base import RoomError, Identifier, Person, RoomOccupant, St
 from errbot.core import ErrBot
 from errbot.rendering.ansiext import enable_format, TEXT_CHRS
 
+import zulip
+
 
 # Can't use __name__ because of Yapsy.
 log = logging.getLogger('errbot.backends.zulip')
