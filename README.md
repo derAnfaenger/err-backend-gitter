@@ -47,3 +47,17 @@ Tips
 ----
 
 * Rooms in ErrBot are streams in Zulip.
+
+#### directly send msg to room
+
+`#{{stream}}*{{topic}}`
+```python
+self.send(
+    self.build_identifier("#{{code_runtime_alert}}*{{hello}}"),
+    "test"
+)
+self.send(
+    self.build_identifier("#{{code_runtime_alert}}*{{hello}}"),
+    "test2"
+)
+```
