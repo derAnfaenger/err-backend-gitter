@@ -260,7 +260,6 @@ class ZulipBackend(ErrBot):
 
     def send_message(self, msg):
         super().send_message(msg)
-        # import pdb ; pdb.set_trace()
         msg_data = {
             'content': msg.body,
         }
@@ -305,11 +304,13 @@ class ZulipBackend(ErrBot):
 
     def extract_identifiers_from_string(self, text):
         """
-
+        extract username streamname topicname from text
+        :param text:
+        :return username streamname topicname:
         """
 
         exception_message = (
-            'Unparseable zulip identifier, should be of the format `#{{stream}}*{{topic}}`, `<@U12345>`, '
+            'Unparseable zulip identifier, should be of the format `#{{stream}}*{{topic}}`,'
             '`@U12345`. (Got `%s`)'
         )
         text = text.strip()
@@ -318,9 +319,7 @@ class ZulipBackend(ErrBot):
             raise ValueError(exception_message % '')
 
         username = None
-        userid = None
         streamname = None
-        streamid = None
         topicname = None
 
         regex_str_stream = r'#{{(.*)}}$'
@@ -359,8 +358,9 @@ class ZulipBackend(ErrBot):
             if re_res:
                 if len(re_res.groups()) > 0:
                     username = re_res[1]
+        else:
+            raise ValueError(exception_message % text)
 
-        # import pdb ; pdb.set_trace()
         return username, streamname, topicname
 
     def build_identifier(self, txtrep):
@@ -369,11 +369,12 @@ class ZulipBackend(ErrBot):
         username, streamname, topicname = self.extract_identifiers_from_string(txtrep)
 
         if username:
-
-            return ZulipPerson(id=txtrep,
-                              full_name=txtrep,
-                              emails=[txtrep],
-                              client=self.client)
+            return ZulipPerson(
+                id=txtrep,
+                full_name=txtrep,
+                emails=[txtrep],
+                client=self.client
+            )
         if streamname and not topicname:
             return ZulipRoom(
                 id=streamname,
