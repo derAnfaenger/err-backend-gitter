@@ -366,6 +366,13 @@ class ZulipBackend(ErrBot):
     def build_identifier(self, txtrep):
 
         log.debug('building an identifier from %s.', txtrep)
+        if self.check_email(txtrep):
+            return ZulipPerson(
+                id=txtrep,
+                full_name=txtrep,
+                emails=[txtrep],
+                client=self.client
+            )
         username, streamname, topicname = self.extract_identifiers_from_string(txtrep)
 
         if username:
