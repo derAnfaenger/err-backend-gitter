@@ -354,10 +354,13 @@ class ZulipBackend(ErrBot):
                     if len(re_res.groups()) > 0:
                         streamname = re_res[1]
         elif text[0] == '@':
-            re_res = regex_user.search(text)
-            if re_res:
-                if len(re_res.groups()) > 0:
-                    username = re_res[1]
+            if text[1] != '{':
+                username= text
+            else:
+                re_res = regex_user.search(text)
+                if re_res:
+                    if len(re_res.groups()) > 0:
+                        username = re_res[1]
         else:
             raise ValueError(exception_message % text)
 
